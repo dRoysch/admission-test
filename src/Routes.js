@@ -1,32 +1,28 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
 
+// Views
 import Home from "./containers/Home";
 import Form from "./containers/Form";
-import { Route, Routes, Outlet } from "react-router-dom";
 
-export default function MyRoutes(props) {
-  const { tableRows, pokemonTypesOptions, handleUpdatePokemonRow } = props;
+export default function MyRoutes() {
 
   return (
     <div>
       <Routes>
         <Route path="/">
-          <Route index path="/" element={<Home tableRows={tableRows} />} />
+          <Route index path="/" element={<Home />} />
           <Route
             path="home"
-            element={<Form pokemonTypesOptions={pokemonTypesOptions} />}
+            element={<Form />}
           />
           <Route
-            path="" // ? wich path?
+            path="form/:pokemonName" 
             element={
-              <Form
-                pokemonTypesOptions={pokemonTypesOptions}
-                tableRows={tableRows}
-                handleUpdatePokemonRow={handleUpdatePokemonRow}
-              />
+              <Form />
             }
           />
-          <Route index path="*" element={<Home tableRows={tableRows} />} />
+          <Route index path="*" element={<Home />} />
         </Route>
       </Routes>
     </div>

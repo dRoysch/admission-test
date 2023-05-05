@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import { Select as SelectButton } from "@mui/material";
 import Chip from "@mui/material/Chip";
 
 const ITEM_HEIGHT = 48;
@@ -19,19 +19,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
 function getStyles(name, personName, theme) {
   return {
     fontWeight:
@@ -41,9 +28,17 @@ function getStyles(name, personName, theme) {
   };
 }
 
-export default function Select() {
+
+export default function Select({
+  options = [],
+  onChange,
+  name,
+  label,
+  onSelect,
+  defaultValue
+}) {
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  const [personName, setPersonName] = React.useState(defaultValue || []);
 
   const handleChange = (event) => {
     const {
@@ -53,17 +48,20 @@ export default function Select() {
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
+    onSelect(event)
   };
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Selección</InputLabel>
-        <Select
+      <FormControl sx={{ width: '100%' }}>
+        <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
+        <SelectButton
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
           value={personName}
+          name={name}
+          sx={{ width:'100%'}}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
           renderValue={(selected) => (
@@ -75,16 +73,16 @@ export default function Select() {
           )}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {options.map((elem, index) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={index}
+              value={elem.name}
+              style={getStyles(elem, personName, theme)}
             >
-              {name}
+              {elem.name}
             </MenuItem>
           ))}
-        </Select>
+        </SelectButton>
       </FormControl>
     </div>
   );

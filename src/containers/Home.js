@@ -1,38 +1,30 @@
 import React from "react";
 import EnhancedTable from "../components/Table";
 import { useNavigate } from "react-router-dom";
+import usePokemon from "../hooks/usePokemon";
+import LoadingComponent from "../components/loading/LoadingComponent";
+import { Box } from "@mui/material";
 
 export default function Home(props) {
-  const { tableRows } = props;
-
   const navigate = useNavigate();
+
+  const { pokemonList, loading } = usePokemon()
 
   const handleEditButton = (row) => (e) => {
     e.stopPropagation();
-    const {
-      html_image,
-      html_types,
-      html_my_sprite,
-      html_my_types,
-      html_my_teammates,
-      ...params
-    } = row;
-    // ! NAVIGATE NOT ACCEPT HTML PARAMS
-    navigate(`form/${row.name}`, {
-      state: { ...params },
-    });
+    navigate(`form/${row.name}`);
   };
 
   return (
-    <div>
-      {tableRows.length > 0 ? (
+    <Box sx={{ paddingRight: 10, paddingLeft: 10, paddingTop: 4 }}>
+      {!loading ? (
         <EnhancedTable
-          rowsProp={tableRows}
+          rowsProp={pokemonList}
           handleEditButton={handleEditButton}
         />
       ) : (
-        "Loading..."
+        <LoadingComponent />
       )}
-    </div>
+    </Box>
   );
 }
